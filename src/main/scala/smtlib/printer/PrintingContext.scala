@@ -112,6 +112,16 @@ class PrintingContext(writer: Writer) {
     print(keyword.name)
   }
 
+  def printPropLit(prop: PropLiteral): Unit = {
+    if (prop.polarity) {
+      print(prop.symbol)
+    } else {
+      print("(not ")
+      print(prop.symbol)
+      print(")")
+    }
+  }
+
   private def printTerm(term: Term): Unit = term match {
     case Let(vb, vbs, t) =>
       print("(let (")
@@ -180,15 +190,7 @@ class PrintingContext(writer: Writer) {
 
     case CheckSatAssuming(props) =>
       print("(check-sat-assuming ")
-      printNary(props, (prop: PropLiteral) => {
-        if (prop.polarity) {
-          print(prop.symbol)
-        } else {
-          print("(not ")
-          print(prop.symbol)
-          print(")")
-        }
-      }, "(", " ", ")")
+      printNary(props, (pl: PropLiteral) => printPropLit(pl), "(", " ", ")")
       print(")\n")
 
     case DeclareConst(name, sort) =>
@@ -390,8 +392,8 @@ class PrintingContext(writer: Writer) {
     case GetProofResponseSuccess(proof) =>
       print(proof)
 
-    case GetUnsatAssumptionsResponseSuccess(symbols) =>
-      printNary(symbols, "(", " ", ")")
+    case GetUnsatAssumptionsResponseSuccess(props) =>
+      printNary(props, (pl: PropLiteral) => printPropLit(pl), "(", " ", ")")
 
     case GetUnsatCoreResponseSuccess(symbols) =>
       printNary(symbols, "(", " ", ")")

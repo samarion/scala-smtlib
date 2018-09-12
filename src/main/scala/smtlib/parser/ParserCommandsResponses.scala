@@ -257,8 +257,8 @@ trait ParserCommandsResponses { this: ParserCommon with ParserTerms with ParserC
         peekToken match {
           case Tokens.SymbolLit("error") => parseErrorResponse
           case t => {
-            val syms = parseUntil(Tokens.CParen)(parseSymbol _)
-            GetUnsatAssumptionsResponseSuccess(syms)
+            val props = parseUntil(Tokens.CParen)(parsePropLit _)
+            GetUnsatAssumptionsResponseSuccess(props)
           }
         }
       }

@@ -412,6 +412,7 @@ object Commands {
 
 object CommandsResponses {
   import Terms._
+  import Commands.PropLiteral
 
   sealed abstract class CommandResponse extends Positioned with SExpr {
     override def toString: String = printer.RecursivePrinter.toString(this)
@@ -497,7 +498,7 @@ object CommandsResponses {
   case class GetProofResponseSuccess(proof: SExpr) extends 
     GetProofResponse with SuccessfulResponse
 
-  case class GetUnsatAssumptionsResponseSuccess(symbols: Seq[SSymbol]) extends 
+  case class GetUnsatAssumptionsResponseSuccess(props: Seq[PropLiteral]) extends 
     GetUnsatAssumptionsResponse with SuccessfulResponse
 
   case class GetUnsatCoreResponseSuccess(symbols: Seq[SSymbol]) extends 
