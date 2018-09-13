@@ -450,10 +450,10 @@ It spans a couple lines""")))))
 
     def printGetUnsatAssumptions(res: GetUnsatAssumptionsResponse): String = printer.toString(res)
     def parseGetUnsatAssumptions(in: String): GetUnsatAssumptionsResponse = Parser.fromString(in).parseGetUnsatAssumptionsResponse
-    check(GetUnsatAssumptionsResponseSuccess(Seq(SSymbol("a"))),
+    check(GetUnsatAssumptionsResponseSuccess(Seq(PropLiteral(SSymbol("a"), true))),
           printGetUnsatAssumptions, parseGetUnsatAssumptions)
     check(GetUnsatAssumptionsResponseSuccess(
-            Seq(SSymbol("a"), SSymbol("b"))), 
+            Seq(PropLiteral(SSymbol("a"), true), PropLiteral(SSymbol("b"), false))), 
           printGetUnsatAssumptions, parseGetUnsatAssumptions)
 
     def printGetUnsatCore(res: GetUnsatCoreResponse): String = printer.toString(res)

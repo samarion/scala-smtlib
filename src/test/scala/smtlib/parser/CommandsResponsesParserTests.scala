@@ -287,13 +287,15 @@ class CommandsResponsesParserTests extends FunSuite {
       GetUnsatAssumptionsResponseSuccess(Seq()))
   }
 
-  test("get-unsat-assumptions response is a list of symbols") {
+  test("get-unsat-assumptions response is a list of prop literals") {
     assert(Parser.fromString("(x)").parseGetUnsatAssumptionsResponse === 
-      GetUnsatAssumptionsResponseSuccess(Seq(SSymbol("x"))))
-    assert(Parser.fromString("(a c)").parseGetUnsatAssumptionsResponse === 
-      GetUnsatAssumptionsResponseSuccess(Seq(SSymbol("a"), SSymbol("c"))))
-    assert(Parser.fromString("(a b c d)").parseGetUnsatAssumptionsResponse === 
-      GetUnsatAssumptionsResponseSuccess(Seq(SSymbol("a"), SSymbol("b"), SSymbol("c"), SSymbol("d"))))
+      GetUnsatAssumptionsResponseSuccess(Seq(PropLiteral(SSymbol("x"), true))))
+    assert(Parser.fromString("((not a) c)").parseGetUnsatAssumptionsResponse === 
+      GetUnsatAssumptionsResponseSuccess(Seq(PropLiteral(SSymbol("a"), false), PropLiteral(SSymbol("c"), true))))
+    assert(Parser.fromString("(a b (not c) d)").parseGetUnsatAssumptionsResponse === 
+      GetUnsatAssumptionsResponseSuccess(Seq(
+        PropLiteral(SSymbol("a"), true), PropLiteral(SSymbol("b"), true),
+        PropLiteral(SSymbol("c"), false), PropLiteral(SSymbol("d"), true))))
   }
 
   /*
